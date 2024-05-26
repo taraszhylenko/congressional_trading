@@ -27,6 +27,6 @@ for _, ptr_row in ptr_index.iterrows():
     if not os.path.isfile(output_file):
         urllib.request.urlretrieve(f"https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf", output_file)
         print(f"Fetched {record_name}")
-        time.sleep(30 + random.randint(0, 10))
+        time.sleep(5 + random.randint(0, 10))
     else:
         print(f"{record_name} is present")
