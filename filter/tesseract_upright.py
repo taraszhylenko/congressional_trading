@@ -20,13 +20,16 @@ def filter_upright_pdfs(pdf_names_set, input_pdf_dir, output_pdf_dir, output_txt
         print(f'Processing {pdfname}')
         pdffullname       = f'{input_pdf_dir}/{pdfname}'
         pdffullnameoutput = f'{output_pdf_dir}/{pdfname}'
-        imgs = p2i.convert_from_path(pdffullname)
-        if 'PERIODIC TRANSACTION REPORT' in pytesseract.image_to_string(imgs[0], lang='eng'):
-            os.system(f'cp "{pdffullname}" "{pdffullnameoutput}"')
-            for img_idx, img in enumerate(imgs):
-                page_name = '.'.join(pdfname.split('.')[:-1]) + f'_page_{img_idx}.txt'
-                with open(f'{output_txt_dir}/{page_name}', 'w') as f:
-                    f.write(pytesseract.image_to_string(img, lang='eng'))
+        if not os.path.isfile(pdffullnameoutput):
+            imgs = p2i.convert_from_path(pdffullname)
+            if 'PERIODIC TRANSACTION REPORT' in pytesseract.image_to_string(imgs[0], lang='eng'):
+                os.system(f'cp "{pdffullname}" "{pdffullnameoutput}"')
+                for img_idx, img in enumerate(imgs):
+                    page_name = '.'.join(pdfname.split('.')[:-1]) + f'_page_{img_idx}.txt'
+                    with open(f'{output_txt_dir}/{page_name}', 'w') as f:
+                        f.write(pytesseract.image_to_string(img, lang='eng'))
+        else:
+            print(f'{pdfname} already exists')
 
 
 pdf_names = os.listdir(args.input_pdf_dir)
